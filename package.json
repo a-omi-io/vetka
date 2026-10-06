@@ -1,6 +1,6 @@
 {
-  "name": "@omi-io/template",
-  "description": "Nx monorepo template for TypeScript libraries with Yarn, CI, and release workflows",
+  "name": "extendable-variants-libs",
+  "description": "Type-safe class variants that extend each other",
   "private": true,
   "engines": {
     "node": ">=20.0.0",
