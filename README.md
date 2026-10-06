@@ -3,7 +3,7 @@
 Class variants with inheritance. Describe a component's class names as a base, variants, default variants and compound variants, then build new utilities on top of existing ones with `extends`.
 
 ```ts
-import { vetka } from "vetka";
+import { vetka } from "vetka-variants";
 
 const button = vetka({
     base: "font-semibold rounded",
@@ -26,7 +26,7 @@ The usage guide is in [`packages/vetka`](packages/vetka/README.md).
 
 A Yarn workspaces monorepo run by [Nx](https://nx.dev). The library is its only package:
 
-- [`packages/vetka`](packages/vetka) — the `vetka` package that is published to npm.
+- [`packages/vetka`](packages/vetka) — the `vetka-variants` package that is published to npm.
 
 The root package, `vetka-monorepo`, is private. It holds the shared tooling: ESLint, Commitlint, Husky, and the CI and release workflows. Packages are built with `omi-io-pkg` from `@omi-io/pkg-scripts`.
 
@@ -51,11 +51,11 @@ yarn test:ci-scripts   # BATS tests for scripts/ci
 
 CI installs with `yarn install --immutable`, so commit `yarn.lock` whenever dependencies change.
 
-Commit messages follow Conventional Commits with a mandatory scope, enforced by Commitlint: `vetka` for the library, `root` for the repository itself, or `any`.
+Commit messages follow Conventional Commits with a mandatory scope, enforced by Commitlint: `variants` for the library, `root` for the repository itself, or `any`.
 
 ## Releasing
 
-Push a branch named `release/vetka/<x.y.z>`, for example `release/vetka/1.0.0`. The release workflow builds the package, sets its version, writes the changelog and the GitHub release, publishes to npm with provenance, and pushes the release commit and the `vetka@<x.y.z>` tag to `main`.
+Push a branch named `release/vetka/<x.y.z>`, for example `release/vetka/1.0.0`. The release workflow builds the package, sets its version, writes the changelog and the GitHub release, publishes to npm with provenance, and pushes the release commit and the `vetka-variants@<x.y.z>` tag to `main`.
 
 Publishing needs the `NPM_TOKEN` repository secret.
 

@@ -5,7 +5,7 @@ Class variants with inheritance. Describe a component's class names as a base, v
 ## Usage
 
 ```ts
-import { vetka } from "vetka";
+import { vetka } from "vetka-variants";
 
 const button = vetka({
     base: "font-semibold rounded",
@@ -50,7 +50,7 @@ primary({ size: "sm" });
 Variant names and values are inferred from the config and from everything it extends, so props, `defaultVariants` and `compoundVariants` are checked against the merged set.
 
 ```ts
-import type { VariantPropsOf } from "vetka";
+import type { VariantPropsOf } from "vetka-variants";
 
 type PrimaryProps = VariantPropsOf<typeof primary>;
 // size?: "sm" | "md" | "lg" | null; disabled?: boolean | null; class?: string; className?: string
