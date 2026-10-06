@@ -1,49 +1,62 @@
-# Nx library monorepo template (`@omi-io/template`)
+# vetka
 
-Monorepo starter on [**Nx**](https://nx.dev) (see root `package.json` for the exact version — currently **19.5.x**), [**Yarn 4.1**](https://yarnpkg.com) (pinned via `packageManager` and `.yarn/releases`), and [**Node**](https://nodejs.org) **≥ 20** (see `engines` and `.nvmrc`), in the spirit of `general-core`: Yarn workspaces, shared build tooling from **`@omi-io/pkg-scripts`** (`omi-io-pkg` CLI), Husky, Commitlint, CI, and releases from branches `release/<package-folder>/<semver>`.
+Class variants with inheritance. Describe a component's class names as a base, variants, default variants and compound variants, then build new utilities on top of existing ones with `extends`.
 
-## What’s inside
+```ts
+import { vetka } from "vetka";
 
-A private root **`@omi-io/template`** (not published to npm) and one starter library under **`packages/`**:
+const button = vetka({
+    base: "font-semibold rounded",
+    variants: { size: { sm: "text-sm px-2", md: "text-base px-4" } },
+    defaultVariants: { size: "md" },
+});
 
-- **`@omi-io/example-lib`** — sample TypeScript package with a typical `clean → omi-io-pkg build → tsc (types) → omi-io-pkg alias` flow, **Jest** tests, and ESLint. Remove or replace it after you bootstrap your own packages.
+const primary = vetka({ extends: button, base: "bg-blue-500" });
 
-**`@omi-io/pkg-scripts`** is installed from npm (see `packages/example-lib/package.json`); it is **not** checked in under `packages/` here. Add more libraries as new folders under `packages/` and wire them in Yarn workspaces as usual.
+button();
+// "font-semibold rounded text-base px-4"
 
-## Bootstrapping a new repository
+primary({ size: "sm" });
+// "bg-blue-500 font-semibold rounded text-sm px-2"
+```
 
-1. Copy this `nx-lib-template` folder into your new repo root (or use this folder as the repo root).
-2. Update metadata: root `package.json` `name` (`@omi-io/template` → your scope/name), and for each package under `packages/` set `name`, `description`, and `repository` as needed.
-3. From the repo root:
+The usage guide is in [`packages/vetka`](packages/vetka/README.md).
+
+## Repository layout
+
+A Yarn workspaces monorepo run by [Nx](https://nx.dev). The library is its only package:
+
+- [`packages/vetka`](packages/vetka) — the `vetka` package that is published to npm.
+
+The root package, `vetka-monorepo`, is private. It holds the shared tooling: ESLint, Commitlint, Husky, and the CI and release workflows. Packages are built with `omi-io-pkg` from `@omi-io/pkg-scripts`.
+
+## Development
+
+Requires Node ≥ 20; `.nvmrc` has the version used for development. Yarn 4.1 is pinned through `packageManager` and `.yarn/releases`, so `corepack enable` is enough to get it.
 
 ```bash
 corepack enable
 yarn install
 ```
 
-Yarn is pinned via `.yarn/releases` and the `packageManager` field; you do not need to run `yarn set version` separately.
-
-If you embed the template **inside** another Yarn workspace without its own root, Yarn may report that it is “not part of the project”. Run `touch yarn.lock` once at this template root, then `yarn install` again.
-
-After copying into a **new** repository, keep the committed `yarn.lock` and refresh dependencies with `yarn` when you need updates. CI installs with **`yarn install --immutable`**.
-
-4. Smoke check:
+CI runs these checks on every pull request and on `main`:
 
 ```bash
 yarn lint
+yarn tsc-check
 yarn test
 yarn build
+yarn test:ci-scripts   # BATS tests for scripts/ci
 ```
 
-## Releasing a package (template workflow)
+CI installs with `yarn install --immutable`, so commit `yarn.lock` whenever dependencies change.
 
-- Branch name: **`release/<folder-under-packages>/<x.y.z>`** (regex-enforced in GitHub Actions).  
-  Example: **`@omi-io/example-lib`** in **`packages/example-lib`** → **`release/example-lib/1.2.3`**.
-- The workflow resolves the Nx project as **`@omi-io/<folder>`** — keep `package.json` `name` in sync with that pattern or adjust `.github/workflows/release.yml`.
-- In GitHub repository secrets, set **`NPM_TOKEN`** for npm publishes (workflow uses provenance).
-- The starter package **`@omi-io/example-lib`** is intentionally marked as **`private: true`** to prevent accidental publishes from the template.  
-  Before your first real release, replace/remove `example-lib` and set `private: false` only for packages you actually want to publish.
+Commit messages follow Conventional Commits with a mandatory scope, enforced by Commitlint: `vetka` for the library, `root` for the repository itself, or `any`.
 
-## Act (local GitHub Actions debugging)
+## Releasing
 
-For `release`, you can pass your own event file; **`.act-release-event.json`** at the repo root is usually gitignored.
+Push a branch named `release/vetka/<x.y.z>`, for example `release/vetka/1.0.0`. The release workflow builds the package, sets its version, writes the changelog and the GitHub release, publishes to npm with provenance, and pushes the release commit and the `vetka@<x.y.z>` tag to `main`.
+
+Publishing needs the `NPM_TOKEN` repository secret.
+
+To debug the workflow locally with [act](https://github.com/nektos/act), pass your own event file; `.act-release-event.json` in the repo root is gitignored.
