@@ -20,13 +20,13 @@ primary({ size: "sm" });
 // "bg-blue-500 font-semibold rounded text-sm px-2"
 ```
 
-The usage guide is in [`packages/vetka`](packages/vetka/README.md).
+The usage guide is in [`packages/vetka-variants`](packages/vetka-variants/README.md).
 
 ## Repository layout
 
 A Yarn workspaces monorepo run by [Nx](https://nx.dev). The library is its only package:
 
-- [`packages/vetka`](packages/vetka) — the `vetka-variants` package that is published to npm.
+- [`packages/vetka-variants`](packages/vetka-variants) — the `vetka-variants` package that is published to npm.
 
 The root package, `vetka-monorepo`, is private. It holds the shared tooling: ESLint, Commitlint, Husky, and the CI and release workflows. Packages are built with `omi-io-pkg` from `@omi-io/pkg-scripts`.
 
@@ -55,7 +55,7 @@ Commit messages follow Conventional Commits with a mandatory scope, enforced by 
 
 ## Releasing
 
-Push a branch named `release/vetka/<x.y.z>`, for example `release/vetka/1.0.0`. The release workflow builds the package, sets its version, writes the changelog and the GitHub release, publishes to npm with provenance, and pushes the release commit and the `vetka-variants@<x.y.z>` tag to `main`.
+Push a branch named `release/vetka-variants/<x.y.z>`, for example `release/vetka-variants/1.0.0`. The release workflow builds the package, sets its version, writes the changelog and the GitHub release, publishes to npm with provenance, and pushes the release commit and the `vetka-variants@<x.y.z>` tag to `main`.
 
 Publishing needs the `NPM_TOKEN` repository secret.
 

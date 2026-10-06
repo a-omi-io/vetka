@@ -8679,9 +8679,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vetka-variants@workspace:packages/vetka":
+"vetka-variants@workspace:packages/vetka-variants":
   version: 0.0.0-use.local
-  resolution: "vetka-variants@workspace:packages/vetka"
+  resolution: "vetka-variants@workspace:packages/vetka-variants"
   dependencies:
     "@omi-io/pkg-scripts": "npm:^2.5.0"
     "@types/jest": "npm:^29.5.0"
